@@ -1,0 +1,12 @@
+{
+    "name": "cruz/projet_fil_rouge",
+    "description": "projet_fil_rouge",
+    "autoload": {
+        "psr-4": {
+            "Cruz\\ProjetFilRouge\\": "src/"
+        }
+    },
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    }
+}
