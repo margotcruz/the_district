@@ -12,7 +12,7 @@ function connect_database() {
     $servername = "localhost";
     $username = "admin";
     $password = "Afpa1234";
-    $dbname = "projet_fil_rouge";
+    $dbname = "Projet_fil_rouge";
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -44,11 +44,11 @@ $toute_categories = $affichage_toutes_categories->fetchAll(PDO::FETCH_CLASS | PD
 
 // Récupération des plats
 
-$affichage_plats_vedettes = $conn->prepare("SELECT p.libelle, p.image, p.prix, p.description, 
-                                            SUM(c.quantite) AS total_vendu
-                                            FROM plat p
-                                            JOIN commande c ON p.id = c.id_plat
-                                            GROUP BY p.libelle
+$affichage_plats_vedettes = $conn->prepare("SELECT plat.libelle, plat.image, plat.prix, plat.description, 
+                                            SUM(commande.quantite_plat) AS total_vendu
+                                            FROM plat 
+                                            JOIN commande  ON plat.id = commande.id_plat
+                                            GROUP BY plat.libelle
                                             ORDER BY total_vendu DESC
                                             LIMIT 3;");
 $affichage_plats_vedettes->execute();
@@ -58,7 +58,7 @@ $plat_vedettes = $affichage_plats_vedettes->fetchAll(PDO::FETCH_CLASS | PDO::FET
 // Récupération  par catégorie
 if (isset($_GET['id'])) {
     $plat_vedette_par_categorie = $conn->prepare("SELECT plat.libelle, plat.image, plat.prix, plat.description, 
-                                          SUM(commande.quantite) AS total_vendu
+                                          SUM(commande.quantite_plat) AS total_vendu
                                           FROM plat 
                                           JOIN categorie  ON plat.id_categorie = categorie.id
                                           JOIN commande  ON plat.id = commande.id_plat
@@ -73,26 +73,90 @@ if (isset($_GET['id'])) {
     $platCategorie = array(); 
 }
 
+if (isset($_GET['id'])) {
+    $plat_par_categorie = $conn->prepare("SELECT plat.libelle, plat.image, plat.prix, plat.description, 
+                                          SUM(commande.quantite_plat) AS total_vendu
+                                          FROM plat 
+                                          JOIN categorie  ON plat.id_categorie = categorie.id
+                                          JOIN commande  ON plat.id = commande.id_plat
+                                          WHERE categorie.id = ?
+                                          GROUP BY plat.libelle
+                                          ORDER BY total_vendu DESC");
+    $plat_par_categorie->execute(array($_GET["id"])); 
+    $plat_par_cat = $plat_par_categorie->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "plat");
+} else {
+    echo 'Aucun ID sélectionné';
+    $platCategorie = array(); 
+}
+
 
 if (isset($_GET['id'])) {
-    $plat_vedette_par_categorie = $conn->prepare("SELECT entree.libelle, entree.image, entree.prix, entree.description, 
-                                          SUM(commande.quantite) AS total_vendu
+    $entree_vedette_par_categorie = $conn->prepare("SELECT entree.libelle, entree.image, entree.prix, entree.description, 
+                                          SUM(commande.quantite_entree) AS total_vendu
                                           FROM entree 
                                           JOIN categorie  ON entree.id_categorie = categorie.id
                                           JOIN commande  ON entree.id = commande.id_entree
                                           WHERE categorie.id = ?
                                           GROUP BY entree.libelle
                                           ORDER BY total_vendu DESC
-                                          LIMIT 3;");
+                                          LIMIT 2;");
     $entree_vedette_par_categorie->execute(array($_GET["id"])); 
     $entree_vedette_categorie = $entree_vedette_par_categorie->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "entree");
 } else {
     echo 'Aucun ID sélectionné';
-    $entreeCategorie = array(); 
+    $entree_vedette_categorie = array(); 
 }
 
-      
-        
+if (isset($_GET['id'])) {
+    $entree_par_categorie = $conn->prepare("SELECT entree.libelle, entree.image, entree.prix, entree.description, 
+                                          SUM(commande.quantite_entree) AS total_vendu
+                                          FROM entree 
+                                          JOIN categorie  ON entree.id_categorie = categorie.id
+                                          JOIN commande  ON entree.id = commande.id_entree
+                                          WHERE categorie.id = ?
+                                          GROUP BY entree.libelle
+                                          ORDER BY total_vendu DESC");
+    $entree_par_categorie->execute(array($_GET["id"])); 
+    $entree_categorie = $entree_par_categorie->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "entree");
+} else {
+    echo 'Aucun ID sélectionné';
+    $entree_vedette_categorie = array(); 
+}
+
+
+
+
+
+
+
+
+if (isset($_GET['id'])) {
+    $dessert_vedette = $conn->prepare("SELECT dessert.libelle, dessert.image, dessert.prix, dessert.description,
+                                                    SUM(commande.quantite_dessert) AS total_vendu
+                                                    FROM dessert
+                                                    JOIN commande ON dessert.id = commande.id_dessert
+                                                    GROUP BY dessert.libelle
+                                                    ORDER BY total_vendu
+                                                    LIMIT 2;");
+    $dessert_vedette->execute();
+    $dessertVedette = $dessert_vedette->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "dessert");
+} else {
+    echo 'Aucun ID sélectionné';
+    $dessert_vedette_categorie = array(); 
+}
+
+
+if (isset($_GET['id'])) {
+    $affichagedesdessert = $conn->prepare("SELECT dessert.libelle, dessert.image, dessert.prix, dessert.description,
+                                                    SUM(commande.quantite_dessert) AS total_vendu
+                                                    FROM dessert
+                                                    JOIN commande ON dessert.id = commande.id_dessert
+                                                    GROUP BY dessert.libelle
+                                                    ORDER BY total_vendu");
+    $affichagedesdessert->execute();
+    $affichagedessert = $affichagedesdessert->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "dessert");
+}
+       
        
 
 ?>

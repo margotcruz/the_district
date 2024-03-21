@@ -36,9 +36,13 @@ require_once('header.php')
                                 $plat->affichage_plat();
                               }
                               ?>
-                              <?php 
+                              <?php foreach ($entree_vedette_categorie as $entree) {
+                                $entree->affichage_entree();
+                              }
                               ?>
-                              <?php
+                              <?php foreach ($dessertVedette as $dessert) {
+                                $dessert->affichage_dessert();
+                              }
                               
                               ?>
 </div>
@@ -52,21 +56,31 @@ require_once('header.php')
   <h4 id="scrollspyHeading2" class="affichage_Article">Entrées</h4>
   <div class="carousel-container">
   <div class="carousel">
-                             
+  <?php foreach($entree_categorie as $entreecat) {
+                                $entreecat->affichage_entree();
+                              }
+              ?>       
   </div>
   </div>
   
   <h4 id="scrollspyHeading3" class="affichage_Article">Plats</h4>
   <div class="carousel-container">
   <div class="carousel">
-                            
+              <?php foreach($plat_par_cat as $platcat) {
+                                $platcat->affichage_plat();
+                              }
+              ?>             
   </div>
   </div>
 
   <h4 id="scrollspyHeading4" class="affichage_Article">Dessert</h4>
   <div class="carousel-container">
   <div class="carousel">
-                             
+  <?php foreach ($affichagedesdessert as $dessert) {
+                                $dessert->affichage_dessert();
+                              }
+                              
+                              ?>
   </div>
   </div>
     
