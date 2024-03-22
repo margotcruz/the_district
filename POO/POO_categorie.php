@@ -67,7 +67,7 @@ class categorie {
                 <h5 class="card-title p-3">' . $this->getLibelle() . '</h5>
             </div>
             <div class="card-body mx-auto">
-                <a href="plat-par-categorie.php?id='. $this->getId() .'" class="btn btn-primary">Découvrir</a>
+                <a href="menu.php?id='. $this->getId() .'" class="btn btn-primary">Découvrir</a>
             </div>
         </div>
     </div>';
@@ -76,7 +76,7 @@ class categorie {
 
     public function affichage_categorie_mobile(){
         echo '<div class=" container">
-        <a href="plat-par-categorie.php?id='. $this->getId() .'" class="imagine-link position-relative">
+        <a href="menu.php?id='. $this->getId() .'" class="imagine-link position-relative">
             <img src="'. $this->getImage_mobile() .'" alt="' . $this->getLibelle() . '" class="img-fluid mb-4 img-accueil-mobile">
             <h4 class="image-title position-absolute">' . $this->getLibelle() . '</h4>
         </a>

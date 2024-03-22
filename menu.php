@@ -23,23 +23,41 @@ require_once('header.php')
     <li class="nav-item">
       <a class="nav-link" href="#scrollspyHeading4">Desserts</a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#scrollspyHeading5">Boisson</a>
-    </li>
   </ul>
 </nav>
 <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" class="scrollspy-example bg-body-tertiary p-3 rounded-2" tabindex="0">
   <h4 id="scrollspyHeading1" class="affichage_Article">Nos produits vedettes</h4>
   <div class="carousel-container">
   <div class="carousel">
-                              <?php foreach ($plat_vedette_categorie as $plat) {
-                                $plat->affichage_plat();
+                                          <!-- PLAT -->
+                              <?php
+                              if(isset($plat_vedette_categorie)){
+                                foreach ($plat_vedette_categorie as $plat) {
+                                 $plat->affichage_plat();
+                               }
+                              } else{
+                                    foreach ($plat_vedettes as $plats)
+                                $plats->affichage_plat();
                               }
                               ?>
-                              <?php foreach ($entree_vedette_categorie as $entree) {
-                                $entree->affichage_entree();
+                              
+                                          <!-- ENTREES -->
+
+                              <?php 
+                              if(isset($entree_vedette_categorie)){
+                                foreach ($entree_vedette_categorie as $entree) {
+                                  $entree->affichage_entree();
+                                }
+                              }else {
+                                 foreach($entree_vedettes as $entree){
+                                  $entree->affichage_entree();
+                                }
                               }
                               ?>
+                              
+
+
+                                          <!-- DESSERT -->
                               <?php foreach ($dessertVedette as $dessert) {
                                 $dessert->affichage_dessert();
                               }
@@ -56,59 +74,49 @@ require_once('header.php')
   <h4 id="scrollspyHeading2" class="affichage_Article">Entrées</h4>
   <div class="carousel-container">
   <div class="carousel">
-  <?php foreach($entree_categorie as $entreecat) {
-                                $entreecat->affichage_entree();
-                              }
-              ?>       
+  <?php 
+        if(isset($entree_categorie)) {
+            foreach($entree_categorie as $entreecat) {
+                $entreecat->affichage_entree();
+            }
+        } else{
+          foreach($affichage_entree as $entree) {
+            $entree->affichage_entree();
+        }
+        }
+        ?>
+        
   </div>
   </div>
   
   <h4 id="scrollspyHeading3" class="affichage_Article">Plats</h4>
   <div class="carousel-container">
   <div class="carousel">
-              <?php foreach($plat_par_cat as $platcat) {
-                                $platcat->affichage_plat();
-                              }
-              ?>             
+              <?php 
+              if(isset($plat_par_cat)) {
+                foreach($plat_par_cat as $platcat) {
+                                  $platcat->affichage_plat();
+                                }
+              }else {
+                foreach($affichage_plat as $plat) {
+                $plat->affichage_plat();
+              }  
+              }
+              ?> 
+            
   </div>
   </div>
 
   <h4 id="scrollspyHeading4" class="affichage_Article">Dessert</h4>
   <div class="carousel-container">
   <div class="carousel">
-  <?php foreach ($affichagedesdessert as $dessert) {
+  <?php foreach ($affichagedessert as $dessert) {
                                 $dessert->affichage_dessert();
                               }
                               
                               ?>
   </div>
   </div>
-    
-  <div class="modal" id="myModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Plat ajouté au panier</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      
-      <!-- Modal body -->
-      <div class="modal-body">
-        <p>Voulez-vous continuer à choisir des plats ou accéder à votre panier ?</p>
-      </div>
-      
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Continuer à choisir</button>
-        <a href="panier.html" class="btn btn-secondary">Accéder au panier</a>
-      </div>
-      
-    </div>
-  </div>
-</div>
-
 
 </body>
 <?php

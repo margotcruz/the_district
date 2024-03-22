@@ -28,7 +28,7 @@ function connect_database() {
 
 $conn = connect_database();
 
-// Récupération des catégories
+                                                //CATEGORIES
 
 $affichageCategorie_index = $conn->prepare("SELECT *
                                         FROM categorie
@@ -42,7 +42,10 @@ $affichage_toutes_categories = $conn->prepare("SELECT *
 $affichage_toutes_categories->execute();
 $toute_categories = $affichage_toutes_categories->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "categorie");
 
-// Récupération des plats
+
+
+                                                //PLATS
+
 
 $affichage_plats_vedettes = $conn->prepare("SELECT plat.libelle, plat.image, plat.prix, plat.description, 
                                             SUM(commande.quantite_plat) AS total_vendu
@@ -55,7 +58,7 @@ $affichage_plats_vedettes->execute();
 $plat_vedettes = $affichage_plats_vedettes->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "plat");
 
 
-// Récupération  par catégorie
+
 if (isset($_GET['id'])) {
     $plat_vedette_par_categorie = $conn->prepare("SELECT plat.libelle, plat.image, plat.prix, plat.description, 
                                           SUM(commande.quantite_plat) AS total_vendu
@@ -69,8 +72,7 @@ if (isset($_GET['id'])) {
     $plat_vedette_par_categorie->execute(array($_GET["id"])); 
     $plat_vedette_categorie = $plat_vedette_par_categorie->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "plat");
 } else {
-    echo 'Aucun ID sélectionné';
-    $platCategorie = array(); 
+    $affichage_plats_vedettes->execute();
 }
 
 if (isset($_GET['id'])) {
@@ -85,9 +87,14 @@ if (isset($_GET['id'])) {
     $plat_par_categorie->execute(array($_GET["id"])); 
     $plat_par_cat = $plat_par_categorie->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "plat");
 } else {
-    echo 'Aucun ID sélectionné';
-    $platCategorie = array(); 
+   $affichage_des_plats = $conn->prepare("SELECT plat.libelle, plat.image, plat.prix, plat.description
+                                            FROM plat");
+    $affichage_des_plats->execute();
+    $affichage_plat= $affichage_des_plats->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "plat");
 }
+
+
+                                                    //ENTREES
 
 
 if (isset($_GET['id'])) {
@@ -103,9 +110,18 @@ if (isset($_GET['id'])) {
     $entree_vedette_par_categorie->execute(array($_GET["id"])); 
     $entree_vedette_categorie = $entree_vedette_par_categorie->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "entree");
 } else {
-    echo 'Aucun ID sélectionné';
-    $entree_vedette_categorie = array(); 
+    $les_entrees_vedettes = $conn->prepare("SELECT entree.libelle, entree.image, entree.prix, entree.description, 
+                                            SUM(commande.quantite_entree) AS total_vendu
+                                            FROM entree 
+                                            JOIN commande  ON entree.id = commande.id_entree
+                                            GROUP BY entree.libelle
+                                          ORDER BY total_vendu DESC
+                                          LIMIT 2;");
+$les_entrees_vedettes->execute();
+$entree_vedettes = $les_entrees_vedettes ->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "entree");
 }
+
+
 
 if (isset($_GET['id'])) {
     $entree_par_categorie = $conn->prepare("SELECT entree.libelle, entree.image, entree.prix, entree.description, 
@@ -119,8 +135,10 @@ if (isset($_GET['id'])) {
     $entree_par_categorie->execute(array($_GET["id"])); 
     $entree_categorie = $entree_par_categorie->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "entree");
 } else {
-    echo 'Aucun ID sélectionné';
-    $entree_vedette_categorie = array(); 
+    $affichage_des_entree = $conn->prepare("SELECT entree.libelle, entree.image, entree.prix, entree.description
+                                        FROM entree");
+    $affichage_des_entree ->execute();
+    $affichage_entree = $affichage_des_entree->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "entree");
 }
 
 
@@ -130,7 +148,7 @@ if (isset($_GET['id'])) {
 
 
 
-if (isset($_GET['id'])) {
+
     $dessert_vedette = $conn->prepare("SELECT dessert.libelle, dessert.image, dessert.prix, dessert.description,
                                                     SUM(commande.quantite_dessert) AS total_vendu
                                                     FROM dessert
@@ -140,13 +158,9 @@ if (isset($_GET['id'])) {
                                                     LIMIT 2;");
     $dessert_vedette->execute();
     $dessertVedette = $dessert_vedette->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "dessert");
-} else {
-    echo 'Aucun ID sélectionné';
-    $dessert_vedette_categorie = array(); 
-}
 
 
-if (isset($_GET['id'])) {
+
     $affichagedesdessert = $conn->prepare("SELECT dessert.libelle, dessert.image, dessert.prix, dessert.description,
                                                     SUM(commande.quantite_dessert) AS total_vendu
                                                     FROM dessert
@@ -155,8 +169,12 @@ if (isset($_GET['id'])) {
                                                     ORDER BY total_vendu");
     $affichagedesdessert->execute();
     $affichagedessert = $affichagedesdessert->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "dessert");
-}
+
        
        
 
+
+                                                        //SEARCH
+
+    
 ?>

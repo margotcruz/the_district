@@ -86,31 +86,23 @@
                 <a class="nav-link" href="categorie.php">CATEGORIE</a>
               </li>
               <li class="nav-item m-4 d-flex justify-content-center">
-                <a class="nav-link" href="plats.php">PLATS</a>
+                <a class="nav-link" href="menu.php">PLATS</a>
               </li>
               <li class="nav-item m-4 d-flex justify-content-center">
                 <a class="nav-link" href="contact.php">CONTACT</a>
               </li>
             </ul>
 
-            <form class="d-none d-md-flex mt-0 search-container" role="search">
-              <input
-                class="form-control"
-                type="search"
-                id="searchInput"
-                placeholder="Rechercher"
-                aria-label="Search"
-              />
-              <button class="bi" id="search-button">
-                <svg id="search-icon" class="search-icon" viewBox="0 0 24 24">
-                  <path
-                    d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
-                  />
-                  <path d="M0 0h24v24H0z" fill="none" />
-                </svg>
-              </button>
-              <ul id="searchResults"></ul>
-            </form>
+            <form class="d-none d-md-flex mt-0 search-container" role="search" method="POST">
+            <input type="text" name="searchTerm" placeholder="Entrez votre terme de recherche" aria-label="Search">
+    <button class="bi" id="search-button">
+        <svg id="search-icon" class="search-icon" viewBox="0 0 24 24">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            <path d="M0 0h24v24H0z" fill="none"/>
+        </svg>
+    </button>
+</form>
+
           </div>
 
           <!-- MOBILE -->
@@ -142,49 +134,8 @@
         </div>
       </div>
     </nav>
-    <div>
-    <button
-      class="btn btn-primary mx-3 position-relative"
-      type="button"
-      data-bs-toggle="offcanvas"
-      data-bs-target="#offcanvasScrolling"
-      aria-controls="offcanvasScrolling">
-      Panier
-      <span class="badge position-absolute top--9 end--9 badge">0</span>
-    </button>
-
-    <div
-      class="offcanvas offcanvas-start"
-      data-bs-scroll="true"
-      data-bs-backdrop="false"
-      tabindex="-1"
-      id="offcanvasScrolling"
-      aria-labelledby="offcanvasScrollingLabel">
-      <div class="offcanvas-header justify-content-center" id="panier">
-        <h5 class="offcanvas-title mx-auto" id="offcanvasScrollingLabel">Panier</h5>
-        <button
-          type="button"
-          class="btn-close close-custom"
-          data-bs-dismiss="offcanvas"
-          aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body" id="liste-panier">
-        <!-- Contenu du panier -->
-      </div>
-      <div class="d-flex justify-content-center mt-5">
-        <p id="total-prix" class="p-2 btn"></p>
-      </div>
-      <div class="mx-auto">
-        <button id="commander" class="btn p-1 mt-5 mb-3">
-          Commander
-        </button>
-        <button id="vider-panier" class="btn mt-5 mb-3">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-  <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
-</svg>
-        </button>
-      </div>
+    
     </div>
 </div>
   </header>
-</html>
+  <?php require_once 'search.php' ?>

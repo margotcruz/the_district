@@ -79,17 +79,7 @@ class entree {
     }
 
 
-public function affichage_entree_categorie() {
-    echo '<div class="affichage_Article mt-5">
-    <div class=" justify-content-center">
-        <h4>'. $this->getLibelleEntree().'</h4>
-        <img src="'. $this->getImage().'" class="col-3 mb-4" alt="'. $this->getLibelleEntree().'" srcset="">
-        <p>'. $this->getDescriptionEntree().'</p>
-        <p>'. $this->getPrix().' € par portion.</p>
-        <button class="ajouter-au-panier btn btn-primary" data-id="'. $this->getIdEntree().'">Ajouter au Panier</button>
-    </div>
-</div>';
-}
+
 
 public function affichage_entree() {
     echo ' 
