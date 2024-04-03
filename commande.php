@@ -10,7 +10,7 @@ require_once('header.php')
 <div class="container form_custom mt-5 ">
             <p id="total-prix"></p>
         </div>
-      <form class="Formulaire" id="mon_formulaire_commande" method="post" action="">
+      <form class="Formulaire" id="mon_formulaire_commande" method="post" action="formulaire_commande.php">
         
         <div class="mb-3 d-md-flex ">
             <label for="nom" class="form-label mx-3">Nom:</label>

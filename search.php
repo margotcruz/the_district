@@ -1,4 +1,5 @@
 <?php
+
 require_once('asset/PDO_connect.php');
 $conn = connect_database();
 
@@ -8,11 +9,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "SELECT plat.libelle AS plat_libelle, plat.image AS plat_image, plat.description AS plat_description,
                     entree.libelle AS entree_libelle, entree.image AS entree_image, 
                     dessert.libelle AS dessert_libelle, dessert.image AS dessert_image, 
-                    categorie.libelle AS categorie_libelle, categorie.image_mobile AS categorie_image
+                    categorie.id AS id_categorie, categorie.libelle AS categorie_libelle, categorie.image_mobile AS categorie_image
                 FROM categorie
                 LEFT JOIN plat ON plat.id_categorie = categorie.id
                 LEFT JOIN entree ON entree.id_categorie = categorie.id
-                LEFT JOIN dessert ON 1=1 -- Une condition toujours vraie pour inclure la table dessert
+                LEFT JOIN dessert ON plat.id_categorie = categorie.id
                 WHERE plat.libelle LIKE :searchTerm
                     OR entree.libelle LIKE :searchTerm
                     OR dessert.libelle LIKE :searchTerm
@@ -22,42 +23,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Créer un tableau pour stocker les plats uniques
-        $uniquePlats = array();
-        
-        foreach ($results as $result) {
-            $platLibelle = $result['plat_libelle'];
-            if (!isset($uniquePlats[$platLibelle])) {
-                // Ajouter le plat aux résultats uniques
-                $uniquePlats[$platLibelle] = $result;
+        // Vérifier s'il y a des résultats
+        if (!empty($results)) {
+            // Afficher les résultats correspondant à la recherche
+            foreach ($results as $result) {
+                // Vérifier si le plat est vide
+                if (!empty($result['plat_libelle'])) {
+                    echo ' 
+                    <div class="card">
+                        <img src="'. $result['plat_image'] .'" alt="' . $result['plat_libelle'] . '">
+                        <div class="card-details">
+                            <p>' . $result['plat_libelle'] . '</p>
+                            <p>' . $result['plat_description'] . '</p>
+                            <button>Commander</button>
+                        </div>
+                    </div>
+                    ';
+                }
+
+                // Vérifier si l'entrée est vide
+                if (!empty($result['entree_libelle'])) {
+                    echo ' 
+                    <div class="card">
+                        <img src="'. $result['entree_image'] .'" alt="' . $result['entree_libelle'] . '">
+                        <div class="card-details">
+                            <p>' . $result['entree_libelle'] . '</p>
+                            <button>Commander</button>
+                        </div>
+                    </div>
+                    ';
+                }
+
+                // Vérifier si le dessert est vide
+                if (!empty($result['dessert_libelle'])) {
+                    echo ' 
+                    <div class="card">
+                        <img src="'. $result['dessert_image'] .'" alt="' . $result['dessert_libelle'] . '">
+                        <div class="card-details">
+                            <p>' . $result['dessert_libelle'] . '</p>
+                            <button>Commander</button>
+                        </div>
+                    </div>
+                    ';
+                }
             }
-        }
-
-        // Afficher les résultats uniques
-        foreach ($uniquePlats as $plat) {
-            echo ' 
-            <div class="card">
-                <img src="'. $plat['plat_image'] .'" alt="' . $plat['plat_libelle'] . '">
-                <div class="card-details">
-                    <p>' . $plat['plat_libelle'] . '</p>
-                    <p>' . $plat['plat_description'] . '</p>
-                    <button>Commander</button>
-                </div>
-            </div>
-            ';
-
-            // Afficher les détails de la catégorie
-            echo ' 
-            <div class="card">
-                <img src="'. $plat['categorie_image'] .'" alt="' . $plat['categorie_libelle'] . '">
-                <div class="card-details">
-                    <button>Commander</button>
-                </div>
-            </div>
-            ';
+        } else {
+            echo "Aucun résultat trouvé.";
         }
     } else {
         echo "Veuillez entrer un terme de recherche.";
     }
 }
+
 ?>
