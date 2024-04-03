@@ -23,51 +23,73 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Vérifier s'il y a des résultats
-        if (!empty($results)) {
-            // Afficher les résultats correspondant à la recherche
-            foreach ($results as $result) {
-                // Vérifier si le plat est vide
-                if (!empty($result['plat_libelle'])) {
-                    echo ' 
-                    <div class="card">
-                        <img src="'. $result['plat_image'] .'" alt="' . $result['plat_libelle'] . '">
-                        <div class="card-details">
-                            <p>' . $result['plat_libelle'] . '</p>
-                            <p>' . $result['plat_description'] . '</p>
-                            <button>Commander</button>
-                        </div>
-                    </div>
-                    ';
-                }
+        // Créer un tableau pour stocker les résultats uniques
+        $uniqueResults = array();
 
-                // Vérifier si l'entrée est vide
-                if (!empty($result['entree_libelle'])) {
-                    echo ' 
-                    <div class="card">
-                        <img src="'. $result['entree_image'] .'" alt="' . $result['entree_libelle'] . '">
-                        <div class="card-details">
-                            <p>' . $result['entree_libelle'] . '</p>
-                            <button>Commander</button>
-                        </div>
+        // Parcourir les résultats
+        foreach ($results as $result) {
+            // Vérifier si le plat est unique et correspond à la recherche
+            if (!empty($result['plat_libelle']) && stripos($result['plat_libelle'], $searchTerm) !== false && !isset($uniqueResults[$result['plat_libelle']])) {
+                $uniqueResults[$result['plat_libelle']] = $result;
+                echo ' 
+                <div class="card">
+                    <img src="'. $result['plat_image'] .'" alt="' . $result['plat_libelle'] . '">
+                    <div class="card-details">
+                        <p>' . $result['plat_libelle'] . '</p>
+                        <p>' . $result['plat_description'] . '</p>
+                        <button>Commander</button>
                     </div>
-                    ';
-                }
+                </div>
 
-                // Vérifier si le dessert est vide
-                if (!empty($result['dessert_libelle'])) {
-                    echo ' 
-                    <div class="card">
-                        <img src="'. $result['dessert_image'] .'" alt="' . $result['dessert_libelle'] . '">
-                        <div class="card-details">
-                            <p>' . $result['dessert_libelle'] . '</p>
-                            <button>Commander</button>
-                        </div>
+                <div class="card">
+                    <img src="'. $result['categorie_image'] .'" alt="' . $result['categorie_libelle'] . '">
+                    <div class="card-details">
+                        <p>' . $result['categorie_libelle'] . '</p>
+                        <button><a href="menu.php?id=' . $result['id_categorie'] . '">Afficher plus de la categorie ' . $result['categorie_libelle'] . '</a></button>
                     </div>
-                    ';
-                }
+                </div>
+                ';
             }
-        } else {
+
+            // Vérifier si l'entrée est unique et correspond à la recherche
+            if (!empty($result['entree_libelle']) && stripos($result['entree_libelle'], $searchTerm) !== false && !isset($uniqueResults[$result['entree_libelle']])) {
+                $uniqueResults[$result['entree_libelle']] = $result;
+                echo ' 
+                <div class="card">
+                    <img src="'. $result['entree_image'] .'" alt="' . $result['entree_libelle'] . '">
+                    <div class="card-details">
+                        <p>' . $result['entree_libelle'] . '</p>
+                        <button>Commander</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img src="'. $result['categorie_image'] .'" alt="' . $result['categorie_libelle'] . '">
+                    <div class="card-details">
+                        <p>' . $result['categorie_libelle'] . '</p>
+                        <button><a href="menu.php?id=' . $result['id_categorie'] . '">Afficher plus de la categorie ' . $result['categorie_libelle'] . '</a></button>
+                    </div>
+                </div>
+                ';
+            }
+
+            // Vérifier si le dessert est unique et correspond à la recherche
+            if (!empty($result['dessert_libelle']) && stripos($result['dessert_libelle'], $searchTerm) !== false && !isset($uniqueResults[$result['dessert_libelle']])) {
+                $uniqueResults[$result['dessert_libelle']] = $result;
+                echo ' 
+                <div class="card">
+                    <img src="'. $result['dessert_image'] .'" alt="' . $result['dessert_libelle'] . '">
+                    <div class="card-details">
+                        <p>' . $result['dessert_libelle'] . '</p>
+                        <button>Commander</button>
+                    </div>
+                </div>
+                ';
+            }
+        }
+
+        // Si aucun résultat correspondant à la recherche n'est trouvé
+        if (empty($uniqueResults)) {
             echo "Aucun résultat trouvé.";
         }
     } else {
